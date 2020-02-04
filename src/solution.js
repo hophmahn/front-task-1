@@ -30,7 +30,33 @@ const findLowestCostNode = function(costs, processed) {
     return lowestCostNode;
 }
 
+const calculateAndUpdateNodeCostsAndParents = function({ node, costs, parents, graph }) {
+    const cost = costs[node];
+    const neighbors = graph[node];
+
+    for (let neighbor in neighbors) {
+        const newCost = cost + neighbors[neighbor];
+
+        if (!costs[neighbor]) {
+            costs[neighbor] = newCost;
+            parents[neighbor] = node;
+        } else if (costs[neighbor] > newCost) {
+            costs[neighbor] = newCost;
+            parents[neighbor] = node;
+        }
+    }
+}
+
 const solution = function(graph, start, finish) {
     const { costs, parents } = prepareCostsAndParents(graph, start, finish);
     const processed = new Set();
+    const result = {};
+    
+    let node;
+    do {
+        calculateAndUpdateNodeCostsAndParents({ node, costs, parents, graph });
+        processed.add(node);
+        node = findLowestCostNode(costs, processed);
+    }
+    while(node)
 }
