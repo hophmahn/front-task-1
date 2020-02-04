@@ -47,6 +47,18 @@ const calculateAndUpdateNodeCostsAndParents = function({ node, costs, parents, g
     }
 }
 
+const buildShortestPath = function(parents, finish) {
+    const path = [finish];
+    let parent = parents[finish];
+
+    while(parent) {
+        path.unshift(parent);
+        parent = parents[parent];
+    }
+
+    return path;
+}
+
 const solution = function(graph, start, finish) {
     const { costs, parents } = prepareCostsAndParents(graph, start, finish);
     const processed = new Set();
@@ -59,4 +71,9 @@ const solution = function(graph, start, finish) {
         node = findLowestCostNode(costs, processed);
     }
     while(node)
+
+    result.path = buildShortestPath(parents, finish);
+    result.distance = costs[finish];
+
+    return result;
 }
